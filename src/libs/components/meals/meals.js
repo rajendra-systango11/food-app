@@ -8,3 +8,14 @@ export async function getMeals() {
     image: meal.image || '/images/default.jpg', // Fallback image if none provided
   }));
 }
+
+export async function getMeal(slug) {
+  const meal = db.prepare('SELECT * FROM meals WHERE slug = ?').get(slug);
+  if (!meal) {
+    return null; // Meal not found
+  }
+  return {
+    ...meal,
+    image: meal.image || '/images/default.jpg', // Fallback image if none provided
+  };
+}

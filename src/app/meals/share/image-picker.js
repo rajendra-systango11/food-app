@@ -4,6 +4,10 @@ export default  function ImagePicker({ name,label }) {
     const imageInput = useRef();
   const handleImageChange = () => {
      imageInput.current.click();
+     if (!file) {
+  setPickedImage(null);
+  return;
+}
   };
 
   return (
@@ -16,6 +20,7 @@ export default  function ImagePicker({ name,label }) {
       name={name}
       accept="image/*"
       className={classes.input}
+        required
       ref={imageInput}/>
       <button
         type="button"

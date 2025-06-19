@@ -1,9 +1,11 @@
 import Link from "next/link";
 import classes from "./page.module.css"
-import ImageSlideshow from "@/libs/components/image-slider";
+import ImageSlideshow from "@/libs/components/image-slider/image-slider";
+import MainHeader from "@/libs/components/main-header/main-header";
 export default function Home() {
   return (
    <>
+      <MainHeader/>
      <header className={classes.header}>
         <div className={classes.slideshow}>
           <ImageSlideshow />

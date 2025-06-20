@@ -1,11 +1,16 @@
-export default function CommunityPage(){
+import styles from './page.module.css';
 
-    return (
-        <div>
-            hello community page
-            <p>Welcome to the community page!</p>
-            <p>Here you can connect with other foodies, share your experiences, and discover new recipes.</p>
-            <p>Join discussions, ask questions, and share your culinary adventures  .</p>
-        </div>
-    )
-} 
+export default function CommunityPage() {
+  return (
+    <div className={styles.container}>
+      <h1 className={styles.heading}>Hello Community Page</h1>
+      <p className={styles.paragraph}>Welcome to the community page!</p>
+      <p className={styles.paragraph}>
+        Here you can connect with other foodies, share your experiences, and discover new recipes.
+      </p>
+      <p className={styles.paragraph}>
+        Join discussions, ask questions, and share your culinary adventures.
+      </p>
+    </div>
+  );
+}

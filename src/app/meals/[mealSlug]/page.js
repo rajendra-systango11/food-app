@@ -2,6 +2,14 @@ import { getMeal } from "@/libs/components/meals/meals";
 import Image from "next/image";
 import classes from '../page.module.css';
 import BackButton from "./back-button";
+
+export async function generateMetadata({ params }) {
+  return {
+    title: `Meal Details - ${params.mealSlug}`,
+    description: `Details about the meal: ${params.mealSlug}`,
+  };
+};
+
 export default async function MealDetailsPage({ params }) {
 const meal = await getMeal(params.mealSlug);
  

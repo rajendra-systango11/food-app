@@ -2,7 +2,7 @@
 
 import { saveMeal } from "@/libs/components/meals/meals";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/dist/server/api-utils";
+import { redirect } from "next/navigation";
 
 export async function shareMeal(formData) {
  console.log(formData, 'formData in shareMeal action');

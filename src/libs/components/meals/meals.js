@@ -1,48 +1,52 @@
-import sql from 'better-sqlite3';
-const db = sql('meals.db');
-import fs from 'fs';
+ import { db } from '@/libs/db';
+ 
+// ✅ Get all meals
 export async function getMeals() {
-  const meals = db.prepare('SELECT * FROM meals').all();
-  return meals.map(meal => ({
+  const result = await db.execute('SELECT * FROM meals');
+  return result.rows.map((meal) => ({
     ...meal,
-    image: meal.image || '/images/default.jpg', // Fallback image if none provided
+    image: meal.image || '/images/default.jpg',
   }));
 }
 
+// ✅ Get a single meal by slug
 export async function getMeal(slug) {
-  const meal = db.prepare('SELECT * FROM meals WHERE slug = ?').get(slug);
-  if (!meal) {
-    return null; // Meal not found
-  }
+  const result = await db.execute({
+    sql: 'SELECT * FROM meals WHERE slug = ?',
+    args: [slug],
+  });
+
+  const meal = result.rows[0];
+  if (!meal) return null;
+
   return {
     ...meal,
-    image: meal.image || '/images/default.jpg', // Fallback image if none provided
+    image: meal.image || '/images/default.jpg',
   };
 }
+
+// ✅ Save a new meal
 export async function saveMeal(meal) {
-console.log('module shareMeal called with meal:', meal);
+    const buffer = Buffer.from(await meal.image.arrayBuffer());
+  const base64 = buffer.toString('base64');
 
-  const extensions = meal.image.name.split('.').pop()
-  const fileName = `${meal.title.replace(/\s+/g, '-').toLowerCase()}-${Date.now()}.${extensions}`;
-  const filePath = `public/images/${fileName}`;
-
-  const stream=fs.createWriteStream(filePath);
-  const bufferImage = await meal.image.arrayBuffer();
-  stream.write(Buffer.from(bufferImage),(err) => {
-    if (err) {
-      console.error('Error writing image file:', err);
-      throw new Error('Failed to save image');
-    }
-  });
-  meal.image = `/images/${fileName}`; // Update the meal object with the new image path
-
-  stream.end(); 
+  const imagePath = `data:${meal.image.type};base64,${base64}`;
  
-  // Insert the meal into the database
-  const stmt = db.prepare(
-    'INSERT INTO meals (creator, creator_email,slug, title, summary, instructions, image) VALUES (?,?, ?, ?, ?, ?, ?)'
-  );
-  stmt.run(meal.name, meal.email,meal.name, meal.title, meal.summary, meal.instructions, meal.image);
+  await db.execute({
+    sql: `
+      INSERT INTO meals (creator, creator_email, slug, title, summary, instructions, image)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `,
+    args: [
+      meal.name,
+      meal.email,
+      meal.name,
+      meal.title,
+      meal.summary,
+      meal.instructions,
+      imagePath,
+    ],
+  });
 
   return { success: true };
 }

@@ -18,7 +18,7 @@ import classes from './page.module.css';
                     <MealItem
                         key={meal.slug}
                         title={meal.title}
-                        slug={meal.slug}
+                        slug={meal.slug}    
                         image={meal.image}
                         summary={meal.summary}
                         creator={meal.creator}

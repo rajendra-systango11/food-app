@@ -5,7 +5,6 @@ import MainHeader from "@/libs/components/main-header/main-header";
 export default function Home() {
   return (
    <>
-      <MainHeader/>
      <header className={classes.header}>
         <div className={classes.slideshow}>
           <ImageSlideshow />
